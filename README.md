@@ -13,4 +13,9 @@ Here's a collection of fun little tools that let you think about [The Tower]
 - The [subreddit](https://www.reddit.com/r/TheTowerGame/) has good info but you should watch out for old posts; they're often wrong about the game as it exists now.
 - There's a [Discord](https://discord.com/invite/thetowerdefense) but I've never joined
 
+## Who Am I?
+
+- I play as TALlama (ID 3EC5BD5DEB50B244)
+- I'm in a nice guild (ID 13XRNH)
+
 [The Tower]: https://www.techtreegames.com

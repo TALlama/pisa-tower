@@ -292,11 +292,12 @@ Rare Modules	1
         }
 
         #parseNumber(str) {
-          let match = str.match(/^([\d,.]+)([kMBTqQsS]?)$/);
+          let match = str.match(/^([\d,.]+)([kKMBTqQsS]?)$/);
           if (!match) return str;
 
           let number = parseFloat(match[1].replace(/,/g, ""));
           let suffix = match[2];
+          if (suffix === "K") { suffix = "k" } // why is this one weird?
 
           if (suffix) {
             let index = TheTower.SUFFIXES.indexOf(suffix);
