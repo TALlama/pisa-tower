@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pisa • How Does Your Tower Lean?</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.5;
+        margin: 0;
+        padding: 0;
+
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+          "header controls"
+          "output raw"
+          "output raw";
+      }
+
+      :root {
+        --header-background: #3c3f98;
+        --header-color: #fff;
+        --raw-background: oklch(from var(--header-background) l c h / 0.1);
+
+        --chart-width: 35vw;
+      }
+
+      #site-header {
+        grid-area: header;
+        background-color: var(--header-background);
+        color: var(--header-color);
+
+        h1 {
+          margin: 0;
+          padding: 0 0.5em;
+        }
+      }
+
+      #controls {
+        grid-area: controls;
+        padding: 1em;
+        display: flex;
+        background-color: var(--header-background);
+
+        #source {
+          font-size: 1em;
+          height: 1em;
+          flex-grow: 1;
+        }
+      }
+
+      #raw {
+        --border-color: #ccc;
+
+        grid-area: raw;
+        font-size: 50%;
+        background-color: var(--raw-background);
+        padding: 0 3em 3em;
+
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 0 1rem;
+
+        align-content: start;
+        align-items: start;
+
+        h2 {
+          margin: 1em 0 0 0;
+          padding: 0;
+          text-align: end;
+          border-bottom: 1px solid var(--border-color);
+          align-self: end;
+        }
+
+        dl {
+          display: grid;
+          grid-template-columns: subgrid;
+          grid-column: span 2;
+          margin: 0;
+          padding: 0;
+
+          dt {
+            font-weight: 600;
+            justify-self: end;
+            grid-column: 1;
+            width: max-content;
+            padding-inline: 0.5em;
+            border-right: 1px solid var(--border-color);
+          }
+
+          dd {
+            margin: 0;
+          }
+        }
+      }
+
+      #output {
+        grid-area: output;
+
+        display: grid;
+        gap: 2em;
+        grid-template-columns: repeat(auto-fit, minmax(var(--chart-width), 1fr));
+        grid-auto-rows: min-content;
+
+        [data-chart="SummaryChart"] {
+          grid-column: span 2;
+
+          background-color: var(--raw-background);
+          padding: 1em;
+          margin: 0;
+          display: flex;
+          gap: 0.5em;
+
+          dt {
+            margin: 0;
+            font-weight: 600;
+            width: max-content;
+          }
+
+          dd {
+            margin: 0;
+            margin-right: 0.75em;
+          }
+
+          sup, sub { font-size: 70% }
+        }
+
+        > .full-width {
+          grid-column: span 2;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header id="site-header">
+      <h1>Pisa • How Does Your Tower Lean?</h1>
+    </header>
+
+    <section id="controls">
+      <textarea id="source" placeholder="Paste round stats here" autofocus></textarea>
+    </section>
+
+    <aside id="raw">
+    </aside>
+
+    <div id="output"></div>
+
+    <script type="text/towerstats">
+Battle Report
+Game Time	23h 8m 30s
+Real Time	5h 0m 39s
+Tier	11
+Wave	3605
+Killed By	Fast
+Coins earned	204.07B
+Coins per hour	40.73B
+Cash earned	$66.55B
+Interest earned	$3.49M
+Gem Blocks Tapped	7
+Cells Earned	12.06K
+Reroll Shards Earned	2.82K
+Combat
+Damage dealt	12.35S
+Damage Taken	3.45q
+Damage Taken Wall	733.89T
+Damage Taken While Berserked	20.08q
+Damage Gain From Berserk	x8.00
+Death Defy	1
+Lifesteal	0
+Projectiles Damage	221.92s
+Projectiles Count	2.23M
+Thorn damage	89.57s
+Orb Damage	7.21S
+Enemies Hit by Orbs	185621
+Land Mine Damage	664.11Q
+Land Mines Spawned	131533
+Rend Armor Damage	151.58s
+Death Ray Damage	3.33S
+Smart Missile Damage	3.55s
+Inner Land Mine Damage	0
+Chain Lightning Damage	604.12s
+Death Wave Damage	9.34Q
+Tagged by Deathwave	20895
+Swamp Damage	45.82s
+Black Hole Damage	45.35s
+Electrons Damage	802.05s
+Utility
+Waves Skipped	835
+Recovery Packages	1898
+Free Attack Upgrade	1459
+Free Defense Upgrade	2459
+Free Utility Upgrade	1197
+HP From Death Wave	0.00
+Coins From Death Wave	25.87M
+Cash From Golden Tower	$27.81B
+Coins From Golden Tower	8.09B
+Coins From Black Hole	2.04B
+Coins From Spotlight	177.41M
+Coins From Orb	0
+Coins from Coin Upgrade	8.73B
+Coins from Coin Bonuses	184.31B
+Enemies Destroyed
+Total Enemies	443081
+Basic	223272
+Fast	71787
+Tank	73670
+Ranged	59123
+Boss	275
+Protector	517
+Total Elites	1371
+Vampires	468
+Rays	462
+Scatters	441
+Saboteur	0
+Commander	0
+Overcharge	0
+Destroyed By Orbs	185485
+Destroyed by Thorns	617
+Destroyed by Death Ray	94610
+Destroyed by Land Mine	18073
+Destroyed in Spotlight	96711
+Bots
+Flame Bot Damage	7.46Q
+Thunder Bot Stuns	0
+Golden Bot Coins Earned	48.30M
+Destroyed in Golden Bot	9637
+Guardian
+Damage	0
+Summoned enemies	9.26K
+Guardian coins stolen	448.61M
+Coins Fetched	325.17M
+Gems	10
+Medals	9
+Reroll Shards	180
+Cannon Shards	9
+Armor Shards	0
+Generator Shards	15
+Core Shards	9
+Common Modules	3
+Rare Modules	1
+    </script>
+    <script id="basics" type="text/javascript">
+      Array.prototype.zip = function(otherArray) {
+        return this.map((k, i) => [k, otherArray[i]]);
+      };
+      Array.prototype.unzip = function() {
+        return this.reduce((acc, [k, v]) => {
+          acc[0].push(k);
+          acc[1].push(v);
+          return acc;
+        }, [[], []]);
+      };
+
+      Object.transformKeys = function(obj, transformer) {
+        return Object.fromEntries(
+          Object.entries(obj).map(([k, v]) => [transformer(k), v])
+        );
+      };
+
+      Math.clamp = function(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+      };
+
+      class TheTower {
+        static SUFFIXES = ["k", "M", "B", "T", "q", "Q", "s", "S", "O", "N"];
+
+        #source;
+
+        constructor(roundStats) {
+          this.#source = roundStats;
+        }
+
+        #parse() {
+          this._stats = {};
+          this._sections = [];
+
+          let currentSection = null;
+          this.#source.split("\n").forEach(line => {
+            let [key, value] = line.split("\t").map(s => s.trim());
+            if (key && value) {
+              this._stats[key] = this.#parseNumber(value);
+              this._sections[currentSection]?.push(key);
+            } else if (key) {
+              this._sections[key] = [];
+              currentSection = key;
+            }
+          })
+        }
+
+        #parseNumber(str) {
+          let match = str.match(/^([\d,.]+)([kMBTqQsS]?)$/);
+          if (!match) return str;
+
+          let number = parseFloat(match[1].replace(/,/g, ""));
+          let suffix = match[2];
+
+          if (suffix) {
+            let index = TheTower.SUFFIXES.indexOf(suffix);
+            if (index >= 0) {
+              number *= Math.pow(1000, index + 1);
+            }
+          }
+
+          return number;
+        }
+
+        static timeToSeconds(timeStr) {
+          let match = timeStr.match(/(?:(\d+)h)?\s*(?:(\d+)m)?\s*(?:(\d+)s)?/);
+          if (!match) return 0;
+
+          let hours = parseInt(match[1] || "0", 10);
+          let minutes = parseInt(match[2] || "0", 10);
+          let seconds = parseInt(match[3] || "0", 10);
+
+          return (hours * 3600) + (minutes * 60) + seconds;
+        }
+
+        static formatNumber(num) {
+          if (typeof num !== "number") return num;
+
+          let suffixIndex = -1;
+          while (num >= 1000 && suffixIndex < TheTower.SUFFIXES.length - 1) {
+            num /= 1000;
+            suffixIndex += 1;
+          }
+
+          if (suffixIndex >= 0) {
+            return `${num.toFixed(2)}${TheTower.SUFFIXES[suffixIndex]}`;
+          } else {
+            return num.toString();
+          }
+        }
+
+        get sections() { this.#parse(); return this._sections; }
+        get stats() { this.#parse(); return this._stats; }
+
+        statsMatching(regex) {
+          let keys = Object.keys(this.stats).filter(key => regex.test(key));
+          return Object.fromEntries(keys.map(key => [key, this.stats[key]]));
+        }
+
+        statsNamed(...keys) {
+          return Object.fromEntries(keys.map(key => [key, this.stats[key]]));
+        }
+
+        static show(roundStats) {
+          let tower = new TheTower(roundStats);
+          new RawStats(tower).render();
+          [
+            SummaryChart,
+            DamageChart,
+            DestroyedByChart,
+            CoinsFromChart,
+            FreeUpgradesChart,
+            EnemiesDestroyedChart,
+          ].forEach(ChartClass => new ChartClass(tower).render());
+        }
+      }
+
+      class RawStats {
+        constructor(tower) {
+          this.tower = tower;
+        }
+
+        render(into=document.getElementById("raw")) {
+          into.innerHTML = "";
+          for (let [section, keys] of Object.entries(this.tower.sections)) {
+            into.appendChild(document.createElement("h2")).textContent = section;
+
+            let dl = document.createElement("dl");
+            into.appendChild(dl);
+
+            keys.forEach(key => {
+              let value = this.tower.stats[key];
+              let dt = document.createElement("dt");
+              dt.textContent = key;
+              let dd = document.createElement("dd");
+              dd.textContent = TheTower.formatNumber(value);
+              dl.appendChild(dt);
+              dl.appendChild(dd);
+            });
+          }
+        }
+      }
+
+      class ChartBase {
+        constructor(tower) {
+          this.tower = tower;
+        }
+
+        get asBar() { return true; }
+        get colorwayDefaults() {
+          return {
+            hue: 0,
+            hueRange: 360,
+            saturation: 70,
+            saturationRange: 0,
+            lightness: 60,
+            lightnessRange: 0,
+            alpha: 1,
+            length: this.pairs.length,
+            fn: (h, s, l, a) => `hsl(${h} ${s}% ${l}% / ${a})`,
+          };
+        }
+
+        colorway(options={}) {
+          options = {...this.colorwayDefaults, ...options};
+
+          return Array.from({length: options.length}).map((_, i) => {
+            const hue = i * (options.hueRange / options.length) + options.hue;
+            const saturation = i * (options.saturationRange / options.length) + options.saturation;
+            const lightness = i * (options.lightnessRange / options.length) + options.lightness;
+            return options.fn(hue, saturation, lightness, options.alpha, options);
+          });
+        }
+        get colorwayBorder() { return this._colorwayBorder ||= this.colorway() }
+        get colorwayBg() { return this._colorwayBg ||= this.colorway({alpha: 0.5}) }
+
+        render(output=document.getElementById("output")) {
+          let into = this.findOrMakeElement(output);
+
+          let canvas = document.createElement("canvas");
+          into.appendChild(canvas);
+          this.setupCanvas(canvas, into);
+
+          into.chart = this.makeChart(canvas.getContext("2d"));
+
+          return into;
+        }
+
+        setupCanvas(canvas, into) {
+          canvas.style.width = "var(--chart-width)";
+
+          if (into.classList.contains("full-width")) {
+            canvas.style.width = "calc(var(--chart-width) * 2)";
+            canvas.style.height = "200px";
+          }
+        }
+
+        findOrMakeElement(output=document.getElementById("output"), tagName="div") {
+          let into = output.querySelector(`${tagName}[data-chart="${this.constructor.name}"]`);
+          if (!into) {
+            into = document.createElement(tagName);
+            into.dataset.chart = this.constructor.name;
+            output.appendChild(into);
+          }
+          into.innerHTML = "";
+          return into;
+        }
+
+        makeChart(ctx) {
+          return this.asBar ? this.makeStackedBarChart(ctx) : this.makeDonutChart(ctx);
+        }
+
+        makeDonutChart(ctx, pairs = this.pairs) {
+          let [labels, values] = pairs.unzip();
+
+          return new Chart(ctx, this.withPercents({
+            type: 'doughnut',
+            data: {
+              labels,
+              datasets: [{
+                label: this.constructor.CHART_NAME,
+                data: values,
+                backgroundColor: this.colorwayBg,
+                borderColor: this.colorwayBorder,
+                borderWidth: 1,
+              }]
+            },
+            options: { plugins: { title: { display: true, text: this.constructor.CHART_NAME } } },
+          }));
+        }
+
+        makeStackedBarChart(ctx, pairs = this.pairs) {
+          return new Chart(ctx, this.withPercents({
+            type: 'bar',
+            data: {
+              labels: [this.constructor.CHART_NAME],
+              datasets: this.stackedBarDatasets(pairs),
+            },
+            options: {
+              indexAxis: 'y',
+              plugins: {
+                title: {display: true, text: this.constructor.CHART_NAME},
+                ...this.tooltipPlugin(pairs),
+              },
+              scales: {
+                y: {display: false},
+                x: {max: (ctx) => this.visibleValues(ctx, pairs).reduce((t, v) => t + v, 0)},
+              },
+            },
+          }));
+        }
+
+        visibleValues(ctx, pairs = this.pairs) {
+          return pairs.map(([_, value], ix) => ctx.chart[this.asBar ? "isDatasetVisible" : "getDataVisibility"](ix) ? value : 0);
+        }
+
+        stackedBarDatasets(pairs) {
+          let bgColors = this.colorwayBg;
+          let borderColors = this.colorwayBorder;
+
+          return pairs.map(([label, value], ix) => { return {
+            label: label,
+            data: [value],
+            stack: true,
+            backgroundColor: bgColors[ix],
+            borderColor: borderColors[ix],
+            borderWidth: 1
+          }});
+        }
+
+        pairsFromStats(stats) {
+          return Object.entries(stats).sort((a, b) => b[1] - a[1]).filter(([, value]) => typeof value === "number" && value > 0);
+        }
+
+        percentages(value, ctx, pairs = this.pairs, locale = "en") {
+          let scientificValue = Intl.NumberFormat(locale, {notation: "scientific"}).format(value);
+          let total = pairs.map(([_, v]) => v).reduce((t, v) => t + v, 0);
+          let percentOfTotal = `${Intl.NumberFormat(locale, {maximumFractionDigits: 2}).format(value * 100 / total)}%`;
+          let visibleTotal = this.visibleValues(ctx, pairs).reduce((t, v) => t + v, 0);
+          let percentOfVisible = `${Intl.NumberFormat(locale, {maximumFractionDigits: 2}).format(value * 100 / visibleTotal)}% of visible`;
+          let percentToShow = total === visibleTotal ? percentOfTotal : ` ${percentOfTotal}\n(${percentOfVisible})`
+          return {value, scientificValue, total, percentOfTotal, visibleTotal, percentOfVisible, percentToShow};
+        }
+        
+        tooltipPlugin(pairs) {
+          return {
+            tooltip: {
+              callbacks: {
+                afterLabel: (ctx) => {
+                  let percentages = this.percentages(ctx.parsed.x, ctx, pairs);
+                  return `${TheTower.formatNumber(ctx.parsed.x)} • ${percentages.scientificValue} • ${percentages.percentToShow}`;
+                }
+              }
+            }
+          };
+        }
+
+        inlinePercentFormatter() {
+          return (value, ctx) => this.percentages(value, ctx, this.pairs).percentToShow;
+        }
+
+        withPercents(chartConfig) {
+          chartConfig.plugins ||= [];
+          chartConfig.plugins.push(ChartDataLabels);
+
+          chartConfig.options ||= {};
+          chartConfig.options.plugins ||= {};
+          chartConfig.options.plugins.datalabels ||= {};
+          chartConfig.options.plugins.datalabels.formatter = this.inlinePercentFormatter();
+
+          return chartConfig;
+        }
+      }
+
+      class SummaryChart extends ChartBase {
+        render(output=document.getElementById("output")) {
+          let into = this.findOrMakeElement(output, "dl");
+
+          Object.entries({
+            Tier: this.tower.stats["Tier"],
+            Wave: `${this.tower.stats["Wave"]}
+              • <small>${(TheTower.timeToSeconds(this.tower.stats["Real Time"]) / this.tower.stats["Wave"]).toFixed(1)}s/wave</small>
+              • <small>skipped ${((this.tower.stats["Waves Skipped"] / this.tower.stats["Wave"]) * 100).toFixed(2)}%</small>`,
+            Coins: `${TheTower.formatNumber(this.tower.stats["Coins per hour"])}/hr
+              • <small>${TheTower.formatNumber(this.tower.stats["Coins earned"] / TheTower.timeToSeconds(this.tower.stats["Real Time"]))}/s</small>`,
+            Damage: `${TheTower.formatNumber(this.tower.stats["Projectiles Damage"] / this.tower.stats["Projectiles Count"])} <sup>dmg</sup>/<sub>projectile</sub>
+              • ${TheTower.formatNumber(this.tower.stats["Orb Damage"] / this.tower.stats["Enemies Hit by Orbs"])} <sup>dmg</sup>/<sub>orb</sub>`,
+          }).forEach(([key, value]) => {
+            let dt = document.createElement("dt");
+            dt.textContent = key;
+            into.appendChild(dt);
+
+            let dd = document.createElement("dd");
+            dd.innerHTML = value;
+            into.appendChild(dd);
+          });
+        }
+      }
+
+      class DamageChart extends ChartBase {
+        static CHART_NAME = "Damage Dealt";
+
+        get asBar() { return true; }
+        get colorwayDefaults() { return {...super.colorwayDefaults, hueRange: 180, saturation: 50} }
+
+        get stats() { return this._stats ||= Object.transformKeys(this.tower.statsMatching(/damage$/i), k => k.replace(/ damage$/i, "").replace(/^Thorn$/, "Thorns")) }
+        get pairs() { return this._pairs ||= this.pairsFromStats(this.stats) }
+
+        setupCanvas(canvas, into) {
+          into.classList.add("full-width");
+          super.setupCanvas(canvas, into);
+        }
+      }
+
+      class DestroyedByChart extends ChartBase {
+        static CHART_NAME = "Killing Blow";
+
+        get stats() {
+          if (this._stats) return this._stats;
+          
+          let stats = Object.transformKeys(this.tower.statsMatching(/Destroyed By/i), k => k.replace(/Destroyed By/i, "").trim());
+
+          let total = this.tower.stats["Total Enemies"];
+          let other = total - Object.values(stats).reduce((a, b) => a + b, 0);
+          if (other > 0) { stats["Other"] = other; }
+
+          return this._stats = stats;
+        }
+        get pairs() { return this._pairs ||= this.pairsFromStats(this.stats) }
+      }
+
+      class CoinsFromChart extends ChartBase {
+        static CHART_NAME = "Coins From";
+
+        get colorwayDefaults() { return {...super.colorwayDefaults, hue: 180, hueRange: 0, lightness: 80, lightnessRange: -80} }
+
+        get stats() { return this._stats ||= Object.transformKeys({...this.tower.statsMatching(/Coins From/i), ...this.tower.statsNamed("Golden Bot Coins Earned", "Guardian coins stolen", "Coins Fetched")}, k => k.replace(/coins (from|stolen|earned)/i, "").trim()) }
+        get pairs() { return this._pairs ||= this.pairsFromStats(this.stats) }
+      }
+
+      class FreeUpgradesChart extends ChartBase {
+        static CHART_NAME = "Free Upgrades";
+
+        get colorwayDefaults() { return {...super.colorwayDefaults, hue: 90, hueRange: 180, saturation: 100} }
+
+        get stats() { return this._stats ||= Object.transformKeys(this.tower.statsMatching(/Free (.*) Upgrade/i), k => k.replace(/Free (.*) Upgrade/i, "$1").trim()) }
+        get pairs() { return this._pairs ||= this.pairsFromStats(this.stats) }
+      }
+
+      class EnemiesDestroyedChart extends ChartBase {
+        static CHART_NAME = "Enemies Destroyed";
+
+        get colorwayDefaults() { return {...super.colorwayDefaults, hue: 270, hueRange: 90} }
+
+        get stats() { return this._stats ||= this.tower.statsNamed("Basic", "Fast", "Tank", "Ranged", "Boss", "Protector", "Vampires", "Rays", "Scatters", "Saboteur", "Commander", "Overcharge") }
+        get pairs() { return this._pairs ||= this.pairsFromStats(this.stats) }
+      }
+
+      document.getElementById("source").addEventListener("input", (event) => {
+        TheTower.show(event.target.value);
+        event.target.innerHTML = "";
+      });
+
+      TheTower.show(document.querySelector("script[type='text/towerstats']").textContent.trim());
+    </script>
+  </body>
+</html>
